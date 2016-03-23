@@ -1,10 +1,12 @@
 package me.moocow9m.www.ConnectFour;
 
+import me.moocow9m.www.ConnectFour.connection.Connect;
 import me.moocow9m.www.ConnectFour.drawing.Draw;
 import me.moocow9m.www.ConnectFour.drawing.boardCreate;
 import me.moocow9m.www.ConnectFour.drawing.rectangleCreate;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import sun.text.resources.no.CollationData_no;
 
 import static me.moocow9m.www.ConnectFour.drawing.drawShapes.drawShape;
 import static me.moocow9m.www.ConnectFour.drawing.drawShapes.drawString;
@@ -95,6 +97,7 @@ public class Main {
                         square.setUp();
                         boardDraw = true;
                         login = false;
+                        Connect.connect("localhost", 63400);
                     }
                 }
             }
