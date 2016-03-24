@@ -29,6 +29,8 @@ public class Main {
     private String password = "";
     private boolean usernameOn = false;
     private boolean passwordOn = false;
+    private int Port = 30480;
+    private String host = "10.205.2.173";
 
     public static void main(String[] args) {
         new Main().run();
@@ -97,7 +99,7 @@ public class Main {
                         square.setUp();
                         boardDraw = true;
                         login = false;
-                        Connect.connect("localhost", 30480);
+                        Connect.connect(host, Port);
                     }
                 }
             }

@@ -27,11 +27,12 @@ public class Users
             }
             catch(IOException e)
             {
-                System.out.println("Could not get input stream from "+toString());
+                System.out.println("Could not get input stream from " + toString());
+                e.printStackTrace();
                 return;
             }
             // Announce
-            System.out.println(socket+" has connected input.");
+            System.out.println(socket + " has connected input.");
             // Enter process loop
             while(true)
             {
@@ -48,7 +49,7 @@ public class Users
         }
     }
     /**
-     * Creates a new Umbra Client User with the socket from the newly connected client.
+     * Creates a new Client User with the socket from the newly connected client.
      *
      * @param newSocket  The socket from the connected client.
      */
@@ -93,6 +94,6 @@ public class Users
      */
     public String toString()
     {
-        return new String(socket.toString());
+        return socket.toString();
     }
 }

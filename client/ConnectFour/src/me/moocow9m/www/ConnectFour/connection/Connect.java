@@ -10,6 +10,7 @@ public class Connect {
         try
         {
             socket = new Socket(host, port);
+            socket.setKeepAlive(true);
             printWriter = new PrintWriter(socket.getOutputStream(),true);
             printWriter.println("Hello Socket");
             printWriter.println("EYYYYYAAAAAAAA!!!!");
