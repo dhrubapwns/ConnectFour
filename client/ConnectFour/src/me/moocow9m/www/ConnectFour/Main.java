@@ -97,7 +97,7 @@ public class Main {
                         square.setUp();
                         boardDraw = true;
                         login = false;
-                        Connect.connect("localhost", 63400);
+                        Connect.connect("localhost", 30480);
                     }
                 }
             }
