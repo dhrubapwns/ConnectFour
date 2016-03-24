@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Connections extends Thread
 {
-    private static final int UMBRA_PORT = 30480;
+    private static final int PORT = 30480;
     private static final int ROOM_THROTTLE = 200;
     private ServerSocket serverSocket;
     private InetAddress hostAddress;
@@ -38,7 +38,7 @@ public class Connections extends Thread
         // Attempt to create server socket
         try
         {
-            serverSocket = new ServerSocket(UMBRA_PORT,0,hostAddress);
+            serverSocket = new ServerSocket(PORT,0,hostAddress);
         }
         catch(IOException e)
         {
