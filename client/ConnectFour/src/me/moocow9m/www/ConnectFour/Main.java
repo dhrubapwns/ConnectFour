@@ -1,12 +1,14 @@
 package me.moocow9m.www.ConnectFour;
 
 import me.moocow9m.www.ConnectFour.connection.Connect;
+import me.moocow9m.www.ConnectFour.connection.UserData;
 import me.moocow9m.www.ConnectFour.drawing.Draw;
-import me.moocow9m.www.ConnectFour.drawing.boardCreate;
 import me.moocow9m.www.ConnectFour.drawing.rectangleCreate;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
-import sun.text.resources.no.CollationData_no;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import static me.moocow9m.www.ConnectFour.drawing.drawShapes.drawShape;
 import static me.moocow9m.www.ConnectFour.drawing.drawShapes.drawString;
@@ -15,8 +17,11 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
+    public static UserData user = new UserData();
     private Draw square;
-    private Draw rectangle;
+    private Draw Username;
+    private Draw Password;
+    private Draw Login;
     private double mouseX, mouseY;
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback keyCallback;
@@ -25,12 +30,15 @@ public class Main {
     private long window;
     private boolean boardDraw = false;
     private boolean login = true;
+    private boolean conectionInfo = false;
     private String username = "";
     private String password = "";
-    private boolean usernameOn = false;
+    private boolean usernameOn = true;
     private boolean passwordOn = false;
+    private boolean portOn = false;
+    private boolean hostOn = false;
     private int Port = 30480;
-    private String host = "10.205.2.173";
+    private String host = "";
 
     public static void main(String[] args) {
         new Main().run();
@@ -39,8 +47,17 @@ public class Main {
 
     private void run() {
         try {
-            rectangle = new rectangleCreate(250, 302, 14, 100, false);
-            rectangle.setUp();
+            Username = new rectangleCreate(250, 302, 14, 100, false);
+            Username.setUp();
+            Password = new rectangleCreate(250, 342, 14, 100, false);
+            Password.setUp();
+            Login = new rectangleCreate(250, 368, 20, 100, false);
+            Login.setUp();
+            try {
+                host = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
             init();
             loop();
             glfwDestroyWindow(window);
@@ -76,12 +93,36 @@ public class Main {
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                     glfwSetWindowShouldClose(window, GLFW_TRUE);
-                } else if (login && action == GLFW_RELEASE && glfwGetKeyName(key, scancode) != null) {
+                } else if (login && action == GLFW_RELEASE && glfwGetKeyName(key, scancode) != null && usernameOn) {
                     username = username + glfwGetKeyName(key, scancode);
-                } else if (key == GLFW_KEY_BACKSPACE && username.length() > 0 && action == GLFW_RELEASE) {
+                } else if (key == GLFW_KEY_BACKSPACE && username.length() > 0 && action == GLFW_RELEASE && usernameOn) {
                     username = username.substring(0, username.length() - 1);
-                } else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
+                } else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE && usernameOn) {
                     username = username + " ";
+                } else if (login && action == GLFW_RELEASE && glfwGetKeyName(key, scancode) != null && passwordOn) {
+                    password = password + glfwGetKeyName(key, scancode);
+                } else if (key == GLFW_KEY_BACKSPACE && password.length() > 0 && action == GLFW_RELEASE && passwordOn) {
+                    password = password.substring(0, password.length() - 1);
+                } else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE && passwordOn) {
+                    password = password + " ";
+                } else if (action == GLFW_RELEASE && glfwGetKeyName(key, scancode) != null && portOn) {
+                    String temp = Port + "";
+                    try {
+                        Port = Integer.valueOf(temp + glfwGetKeyName(key, scancode));
+                    } catch (Exception ignored) {
+                        ignored.printStackTrace();
+                    }
+                } else if (key == GLFW_KEY_BACKSPACE && (Port + "").length() > 0 && action == GLFW_RELEASE && portOn) {
+                    String temp = Port + "";
+                    try {
+                        Port = Integer.valueOf(temp.substring(0, temp.length() - 1));
+                    } catch (Exception ignored) {
+                        ignored.printStackTrace();
+                    }
+                } else if (action == GLFW_RELEASE && glfwGetKeyName(key, scancode) != null && hostOn) {
+                    host = host + glfwGetKeyName(key, scancode);
+                } else if (key == GLFW_KEY_BACKSPACE && host.length() > 0 && action == GLFW_RELEASE && hostOn) {
+                    host = host.substring(0, host.length() - 1);
                 }
             }
         });
@@ -94,12 +135,33 @@ public class Main {
                     double tempX = mouseX;
 
                     double tempY = mouseY;
-                    if ((tempX >= 300 && tempX <= 400) && tempY >= 300 && tempY <= 400) {
-                        square = new boardCreate(300.0f, 300.0f, 50.0f);
-                        square.setUp();
-                        boardDraw = true;
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 348 && tempY <= 366 && conectionInfo) {
+                        user.setPassword(password);
+                        user.setUsername(username.toUpperCase());
+                        Thread connect = new Connect(host, Port);
+                        connect.start();
+                    }
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 327 && tempY <= 341 && conectionInfo) {
+                        hostOn = false;
+                        portOn = true;
+                    }
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 287 && tempY <= 301 && conectionInfo) {
+                        portOn = false;
+                        hostOn = true;
+                    }
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 348 && tempY <= 366 && login) {
+                        conectionInfo = true;
                         login = false;
-                        Connect.connect(host, Port);
+                        usernameOn = false;
+                        passwordOn = false;
+                    }
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 327 && tempY <= 341 && login) {
+                        usernameOn = false;
+                        passwordOn = true;
+                    }
+                    if ((tempX >= 250 && tempX <= 350) && tempY >= 287 && tempY <= 301 && login) {
+                        passwordOn = false;
+                        usernameOn = true;
                     }
                 }
             }
@@ -135,18 +197,67 @@ public class Main {
             glClear(GL_COLOR_BUFFER_BIT);
 
             if (login) {
-                glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
                 drawString("Username:", 260, 280);
-                rectangle.draw();
+                if (usernameOn) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Username.draw();
+                glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
                 drawString(username, 260, 300);
                 drawString("Password:", 260, 320);
-                drawString("Password will not show up", 200, 340);
+                if (passwordOn) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Password.draw();
+                glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                String passwordTemp = "";
+                for (int i = 0; i < password.length(); i++) {
+                    passwordTemp = passwordTemp + "*";
+                }
+                drawString(passwordTemp, 260, 340);
+                if ((mouseX >= 251 && mouseX <= 350) && mouseY >= 348 && mouseY <= 366) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Login.draw();
                 drawString("Login", 272, 360);
+                glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
                 drawShape(7, 20.0f, 15.0f, 100.0f, 100.0f);
             }
             if (boardDraw) {
                 glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
                 square.draw();
+            }
+            if (conectionInfo) {
+                if ((mouseX >= 251 && mouseX <= 350) && mouseY >= 348 && mouseY <= 366) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Login.draw();
+                drawString("Login", 272, 360);
+                drawString("Host:", 260, 280);
+                if (hostOn) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Username.draw();
+                glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                drawString(host, 260, 300);
+                drawString("Port:", 260, 320);
+                if (portOn) {
+                    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+                } else {
+                    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+                }
+                Password.draw();
+                drawString(Port + "", 260, 340);
             }
             glfwSwapBuffers(window);
         }

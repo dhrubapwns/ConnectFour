@@ -269,7 +269,7 @@ public class drawShapes {
                 for (int i = 1; i <= 7; i++) {
                     GL11.glVertex2f(x + i, y - 8);
                 }
-                x += 7;
+                x += 8;
             } else if (c == 'u') {
                 for (int i = 1; i <= 8; i++) {
                     GL11.glVertex2f(x + 1, y - i);
@@ -306,7 +306,7 @@ public class drawShapes {
                 for (int i = 1; i <= 7; i++)
                     GL11.glVertex2f(x + i, y - i);
                 for (int i = 7; i >= 1; i--)
-                    GL11.glVertex2f(x + i, y - 8 - i);
+                    GL11.glVertex2f(x + i, y - 8 + i);
                 x += 8;
             } else if (c == 'y') {
                 GL11.glVertex2f(x + 4, y);
@@ -481,6 +481,21 @@ public class drawShapes {
                 x = startX;
             } else if (c == ' ') {
                 x += 8;
+            } else if (c == '*') {
+                GL11.glVertex2f(x + 2, y);
+                GL11.glVertex2f(x + 2, y - 1);
+                GL11.glVertex2f(x + 2, y - 2);
+                GL11.glVertex2f(x + 2, y - 3);
+                GL11.glVertex2f(x + 2, y - 4);
+                GL11.glVertex2f(x, y - 1);
+                GL11.glVertex2f(x, y - 3);
+                GL11.glVertex2f(x + 3, y - 1);
+                GL11.glVertex2f(x + 3, y - 3);
+                GL11.glVertex2f(x + 1, y - 1);
+                GL11.glVertex2f(x + 1, y - 3);
+                GL11.glVertex2f(x + 4, y - 1);
+                GL11.glVertex2f(x + 4, y - 3);
+                x += 6;
             }
         }
 
