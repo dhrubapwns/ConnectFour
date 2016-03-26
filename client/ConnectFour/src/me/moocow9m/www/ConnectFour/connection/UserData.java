@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class UserData implements Serializable {
     private String Username = "";
     private String Password = "";
+    private double Version = 0.0;
     private ArrayList<Boolean> BoardSetup = new ArrayList<>();
 
     public String getUsername() {
@@ -25,5 +26,11 @@ public class UserData implements Serializable {
 
     public void setPassword(String password) {
         this.Password = password;
+    }
+   public void setVersion(double Version) {
+        this.Version = Version;
+    }
+   public double getVersion() {
+        return Version;
     }
 }
