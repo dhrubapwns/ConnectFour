@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eclipse-userlibraries>
   <library name="lwjgl">
-    <archive path="D:/ConnectFour/client/ConnectFour/libs/lwjgl.jar" />
+    <archive path="/ConnectFour/client/ConnectFour/libs/lwjgl.jar" />
   </library>
 </eclipse-userlibraries>
 
