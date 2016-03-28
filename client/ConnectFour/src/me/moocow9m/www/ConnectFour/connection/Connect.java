@@ -26,6 +26,7 @@ public class Connect extends Thread {
             socket.setKeepAlive(true);
             output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(Main.user);
+            output.writeObject(Main.gameData);
         } catch (Exception e) {
             System.out.println(e);
         }

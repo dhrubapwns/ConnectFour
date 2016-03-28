@@ -1,5 +1,6 @@
 package me.moocow9m.www.ConnectFourServer;
 
+import me.moocow9m.www.ConnectFour.connection.GameData;
 import me.moocow9m.www.ConnectFour.connection.UserData;
 
 import java.io.IOException;
@@ -69,8 +70,22 @@ public class Users {
         public void run() {
             // Open the InputStream
             try {
+                UserData userData = new UserData();
+                GameData gameData = new GameData();
                 in = new ObjectInputStream(socket.getInputStream());
-                System.out.println(((UserData) in.readObject()).getUsername());
+                System.out.println(in.readObject().getClass().getName());
+                if (in.readObject().getClass().getName().equals("me.moocow9m.www.ConnectFour.connection.UserData")) {
+                    userData = (UserData) in.readObject();
+                } else {
+                    gameData = (GameData) in.readObject();
+                }
+                if (gameData != null) {
+
+                } else {
+                    if (userData.getVersion() != 0.01) {
+                        purge();
+                    }
+                }
             } catch (Exception e) {
                 System.out.println("Could not get input stream from " + toString());
                 e.printStackTrace();

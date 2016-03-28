@@ -1,6 +1,7 @@
 package me.moocow9m.www.ConnectFour;
 
 import me.moocow9m.www.ConnectFour.connection.Connect;
+import me.moocow9m.www.ConnectFour.connection.GameData;
 import me.moocow9m.www.ConnectFour.connection.UserData;
 import me.moocow9m.www.ConnectFour.drawing.Draw;
 import me.moocow9m.www.ConnectFour.drawing.rectangleCreate;
@@ -18,6 +19,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     public static UserData user = new UserData();
+    public static GameData gameData = new GameData();
     private Draw square;
     private Draw Username;
     private Draw Password;
@@ -42,6 +44,7 @@ public class Main {
 
     public static void main(String[] args) {
         new Main().run();
+        user.setVersion(0.01);
     }
 
 
