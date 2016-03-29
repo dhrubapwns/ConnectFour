@@ -68,38 +68,42 @@ public class Users {
         private ObjectInputStream in;
 
         public void run() {
-            // Open the InputStream
-            try {
-                UserData userData = new UserData();
-                GameData gameData = new GameData();
-                in = new ObjectInputStream(socket.getInputStream());
-                System.out.println(in.readObject().getClass().getName());
-                if (in.readObject().getClass().getName().equals("me.moocow9m.www.ConnectFour.connection.UserData")) {
-                    userData = (UserData) in.readObject();
-                } else {
-                    gameData = (GameData) in.readObject();
-                }
-                if (gameData != null) {
-
-                } else {
-                    if (userData.getVersion() != 0.01) {
-                        purge();
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println("Could not get input stream from " + toString());
-                e.printStackTrace();
-                return;
-            }
             // Announce
+        	try {
+				in = new ObjectInputStream(socket.getInputStream());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             System.out.println(socket + " has connected input.");
             // Enter process loop
             while (true) {
                 // Sleep
                 try {
                     Thread.sleep(USER_THROTTLE);
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                     System.out.println(toString() + " has input interrupted.");
+                }
+                // Open the InputStream
+                try {
+                    UserData userData = new UserData();
+                    GameData gameData = new GameData();
+                    Object input = in.readObject();
+                    System.out.println(input.getClass().getName());
+                    if (input.getClass().getName().equals("me.moocow9m.www.ConnectFour.connection.UserData")) {
+                        userData = (UserData) input;
+                    } else {
+                        gameData = (GameData) input;
+                    }
+                    if (gameData == null) {
+                        if (userData.getVersion() != 0.01) {
+                            purge();
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Could not get input stream from " + toString());
+                    e.printStackTrace();
+                    return;
                 }
             }
         }
